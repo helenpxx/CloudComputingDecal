@@ -57,7 +57,7 @@ func getCookie(response http.ResponseWriter, request *http.Request) {
 	}
 	//Get the value of the cookie we just obtained and print it out to the response output
 	accessToken := cookie.Value
-	fmt.Fprintln(response, accessToken)
+	fmt.Fprintf(response, accessToken)
 
 	return
 }
@@ -71,7 +71,7 @@ func getQuery(response http.ResponseWriter, request *http.Request) {
 
 	/*YOUR CODE HERE*/
 	userID := request.URL.Query().Get("userID")
-	fmt.Fprintln(response, userID)
+	fmt.Fprintf(response, userID)
 }
 
 func getJSON(response http.ResponseWriter, request *http.Request) {
@@ -177,7 +177,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-
+	response.WriteHeader(200)
 	http.Error(response, errors.New("user doesn't exist").Error(), http.StatusBadRequest)
 	return
 }
@@ -217,6 +217,7 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
+	response.WriteHeader(200)
   http.Error(response, errors.New("user doesn't exist").Error(), http.StatusBadRequest)
   return
 
@@ -262,6 +263,7 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
+	response.WriteHeader(200)
   http.Error(response, errors.New("user doesn't exist").Error(), http.StatusBadRequest)
   return
 }
@@ -304,6 +306,7 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
+	response.WriteHeader(200)
 }
 
 func remove(users []Credentials, index int) []Credentials {
