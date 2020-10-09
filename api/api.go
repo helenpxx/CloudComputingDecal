@@ -70,7 +70,7 @@ func getQuery(response http.ResponseWriter, request *http.Request) {
 
 	/*YOUR CODE HERE*/
 	userID := request.URL.Query().Get("userID")
-	if userId == ""{
+	if userID == ""{
 		response.WriteHeader(400)
 		response.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(response,"")
