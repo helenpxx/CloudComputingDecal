@@ -52,13 +52,12 @@ func getCookie(response http.ResponseWriter, request *http.Request) {
 	/*YOUR CODE HERE*/
 	cookie, err := request.Cookie("access_token")
 	if err != nil {
-		http.Error(response, err.Error(), http.StatusBadRequest)
+		fmt.Fprintf(response, "")
 		return
 	}
 	//Get the value of the cookie we just obtained and print it out to the response output
 	accessToken := cookie.Value
 	fmt.Fprintf(response, accessToken)
-
 	return
 }
 
@@ -71,6 +70,12 @@ func getQuery(response http.ResponseWriter, request *http.Request) {
 
 	/*YOUR CODE HERE*/
 	userID := request.URL.Query().Get("userID")
+	if userId == ""{
+		response.WriteHeader(400)
+		response.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(response,"")
+		return
+	}
 	fmt.Fprintf(response, userID)
 }
 
@@ -134,7 +139,6 @@ func signup(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, errors.New("bad credentials").Error(), http.StatusBadRequest)
 		return
 	}
-
 	users = append(users, creds)
 	response.WriteHeader(201)
 	return
@@ -166,7 +170,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if creds.Username == "" || creds.Password == "" {
+	if creds.Username == "" {
 		http.Error(response, errors.New("bad credentials").Error(), http.StatusBadRequest)
 		return
 	}
@@ -177,8 +181,7 @@ func getIndex(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-	response.WriteHeader(200)
-	http.Error(response, errors.New("user doesn't exist").Error(), http.StatusBadRequest)
+	http.Error(response, errors.New("User doesn't exist").Error(), http.StatusBadRequest)
 	return
 }
 
@@ -206,7 +209,7 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if creds.Username == "" || creds.Password == "" {
+	if creds.Username == "" {
 		http.Error(response, errors.New("bad credentials").Error(), http.StatusBadRequest)
 		return
 	}
@@ -217,7 +220,6 @@ func getPassword(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-	response.WriteHeader(200)
   http.Error(response, errors.New("user doesn't exist").Error(), http.StatusBadRequest)
   return
 
@@ -263,7 +265,6 @@ func updatePassword(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-	response.WriteHeader(200)
   http.Error(response, errors.New("user doesn't exist").Error(), http.StatusBadRequest)
   return
 }
@@ -306,7 +307,7 @@ func deleteUser(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 	}
-	response.WriteHeader(200)
+	http.Error(response, errors.New("User doesn't exist").Error(), http.StatusBadRequest)
 }
 
 func remove(users []Credentials, index int) []Credentials {
